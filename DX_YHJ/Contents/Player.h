@@ -2,6 +2,7 @@
 #include <EngineCore/Actor.h>
 #include <EngineCore/StateManager.h>
 #include "ContentsEnum.h"
+#include "Monster.h"
 
 class AWeapon;
 class USpriteRenderer;
@@ -90,6 +91,7 @@ private:
 	USpriteRenderer* Renderer;
 	USpriteRenderer* ShadowRenderer;
 	UCollision* Collision;
+	UCollision* DetactingMonsterCollision;
 
 	USpriteRenderer* AtkDir;
 	std::shared_ptr<UCamera> Camera;
@@ -110,6 +112,8 @@ private:
 	float LineSpeed = CalSpeed * 0.75f;
 	float Exp = 0;
 
+	std::list<AMonster*> LDetactingMonster;
+
 	std::map<std::string, std::shared_ptr<AWeapon>> MPlayerWeapons;
 	std::map<std::string, std::shared_ptr<AWeapon>>::iterator MPlayerWeaponsIter = MPlayerWeapons.begin();
 
@@ -122,6 +126,8 @@ private:
 	void CheckMouseAimMode();
 	void ChangeMoveAimAtkDir();
 	void ChangeMouseAimAtkDir();
+
+	void CheckNearMonster();
 
 	void CheckHit(float _DeltaTime);
 

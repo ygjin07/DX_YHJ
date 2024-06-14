@@ -20,6 +20,7 @@ enum class ERenderOrder
 enum class ECollisionOrder
 {
 	Player = 1,
+	DetactingMonster,
 	Monster,
 	MonsterRender,
 	ZoneCheck,

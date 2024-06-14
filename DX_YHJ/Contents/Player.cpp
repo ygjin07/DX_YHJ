@@ -30,6 +30,12 @@ APlayer::APlayer()
 	Collision->SetCollisionGroup(ECollisionOrder::Player);
 	Collision->SetCollisionType(ECollisionType::Rect);
 
+	DetactingMonsterCollision = CreateDefaultSubObject<UCollision>("Collision");
+	DetactingMonsterCollision->SetupAttachment(Root);
+	DetactingMonsterCollision->SetScale({ 100.0f * ContentsValue::MultipleSize, 100.0f * ContentsValue::MultipleSize });
+	DetactingMonsterCollision->SetCollisionGroup(ECollisionOrder::DetactingMonster);
+	DetactingMonsterCollision->SetCollisionType(ECollisionType::CirCle);
+
 	AtkDir = CreateDefaultSubObject<USpriteRenderer>("Renderer");
 	AtkDir->SetupAttachment(Root);
 	AtkDir->SetPivot(EPivot::MAX);
@@ -82,6 +88,8 @@ void APlayer::Tick(float _DeltaTime)
 	CheckMouseAimMode();
 	ChangeMoveAimAtkDir();
 	ChangeMouseAimAtkDir();
+
+	CheckNearMonster();
 
 	CheckHit(_DeltaTime);
 
@@ -182,6 +190,23 @@ void APlayer::ChangeMouseAimAtkDir()
 			Renderer->SetDir(EEngineDir::Left);
 		}
 	}
+}
+
+void APlayer::CheckNearMonster()
+{
+	DetactingMonsterCollision->CollisionEnter(ECollisionOrder::Monster, [=](std::shared_ptr<UCollision> _Collison)
+		{
+			LDetactingMonster.push_back(dynamic_cast<AMonster*>(_Collison->GetActor()));
+			int a = 0;
+		}
+	);
+
+	DetactingMonsterCollision->CollisionExit(ECollisionOrder::Monster, [=](std::shared_ptr<UCollision> _Collison)
+		{
+			LDetactingMonster.remove(dynamic_cast<AMonster*>(_Collison->GetActor()));
+			int a = 0;
+		}
+	);
 }
 
 void APlayer::CheckHit(float _DeltaTime)
